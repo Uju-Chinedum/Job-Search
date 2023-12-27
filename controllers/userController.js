@@ -9,14 +9,9 @@ const selection =
   "-password -confirmPassword -__v";
 
 const getAllCustomers = async (req, res) => {
-  const { sort, search } = req.query;
-  const queryObject = { isVerified: true };
+  const { sort } = req.query;
 
-  if (search) {
-    queryObject.position = { $regex: search, $options: "i" };
-  }
-
-  let result = User.find(queryObject).select(selection);
+  let result = Customer.find({}).select(selection);
 
   if (!sort || sort === "a-z") {
     result = result.sort("firstName");
@@ -30,12 +25,12 @@ const getAllCustomers = async (req, res) => {
   const skip = (page - 1) * limit;
 
   result = result.skip(skip).limit(limit);
-  const users = await result;
+  const customers = await result;
 
-  const totalUsers = await User.countDocuments(queryObject);
-  const numOfPages = Math.ceil(totalUsers / limit);
+  const totalCustomers = customers.length;
+  const numOfPages = Math.ceil(totalCustomers / limit);
 
-  res.status(StatusCodes.OK).json({ users, totalUsers, numOfPages });
+  res.status(StatusCodes.OK).json({ customers, totalCustomers, numOfPages });
 };
 
 const getAllJobs = async (req, res) => {
