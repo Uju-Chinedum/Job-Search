@@ -35,19 +35,25 @@ const getAllCustomers = async (req, res) => {
 
 const getAllJobs = async (req, res) => {
   const { sort, search } = req.query;
-  const queryObject = { isVerified: true };
+  const queryObject = {};
 
   if (search) {
     queryObject.position = { $regex: search, $options: "i" };
   }
 
-  let result = User.find(queryObject).select(selection);
+  let result = Job.find(queryObject).select(selection);
 
-  if (!sort || sort === "a-z") {
+  if (sort === "a-z") {
     result = result.sort("firstName");
   }
   if (sort === "z-a") {
     result = result.sort("-firstName");
+  }
+  if (!sort || sort === "newest") {
+    result = result.sort("-createdAt");
+  }
+  if (sort === "oldest") {
+    result = result.sort("createdAt");
   }
 
   const page = Number(req.query.page) || 1;
@@ -55,12 +61,12 @@ const getAllJobs = async (req, res) => {
   const skip = (page - 1) * limit;
 
   result = result.skip(skip).limit(limit);
-  const users = await result;
+  const jobs = await result;
 
-  const totalUsers = await User.countDocuments(queryObject);
-  const numOfPages = Math.ceil(totalUsers / limit);
+  const totalJobs = jobs.length;
+  const numOfPages = Math.ceil(totalJobs / limit);
 
-  res.status(StatusCodes.OK).json({ users, totalUsers, numOfPages });
+  res.status(StatusCodes.OK).json({ jobs, totalJobs, numOfPages });
 };
 
 const getSingleUser = async (req, res) => {
