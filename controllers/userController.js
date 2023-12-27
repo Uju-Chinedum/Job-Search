@@ -69,16 +69,16 @@ const getAllJobs = async (req, res) => {
   res.status(StatusCodes.OK).json({ jobs, totalJobs, numOfPages });
 };
 
-const getSingleUser = async (req, res) => {
-  const user = await User.findOne({ _id: req.params.id }).select(selection);
-  if (!user) {
+const getSingleJob = async (req, res) => {
+  const job = await Job.findOne({ _id: req.params.id }).select(selection);
+  if (!job) {
     throw new NotFound(
       "User Not Found",
       `No user found with id: ${req.params.id}`
     );
   }
 
-  res.status(StatusCodes.OK).json({ user });
+  res.status(StatusCodes.OK).json({ job });
 };
 
 const showCurrentUser = async (req, res) => {
@@ -107,7 +107,7 @@ const deleteUser = async (req, res) => {
 module.exports = {
   getAllCustomers,
   getAllJobs,
-  getSingleUser,
+  getSingleJob,
   showCurrentUser,
   updateUser,
   updatePassword,
