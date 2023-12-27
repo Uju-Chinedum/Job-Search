@@ -1,7 +1,10 @@
 const { Unauthenticated } = require("../errors");
+const { StatusCodes } = require("http-status-codes");
 
-const login = async (model, password) => {
-  const document = await model.findOne({ email });
+const login = async (res, model, password) => {
+  const document = await model
+    .findOne({ email })
+    .select("-password -confirmPassword");
   if (!document) {
     throw new Unauthenticated(
       "Invalid Credentials",
@@ -14,7 +17,22 @@ const login = async (model, password) => {
     throw new Unauthenticated("Invalid Credentials", "Incorrect password");
   }
 
-  return;
+  const payload = {
+    userId: document._id,
+    email: document.email,
+    role: document.role,
+  };
+  const token = createJWT({ payload });
+
+  res.status(StatusCodes.OK).json({
+    message: "User logged in successfully",
+    user: {
+      firstName: document.firstName,
+      lastName: document.lastName,
+      email: document.email,
+    },
+    token,
+  });
 };
 
 module.exports = login;

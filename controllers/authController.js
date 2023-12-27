@@ -4,7 +4,7 @@ const Admin = require("../models/Admin");
 const Customer = require("../models/Customer");
 const Job = require("../models/Job");
 const { BadRequest, Unauthenticated } = require("../errors");
-const { passwordConfirm } = require("../utils");
+const { passwordConfirm, login } = require("../utils");
 
 const registerAdmin = async (req, res) => {
   const isSamePassword = passwordConfirm(
@@ -78,34 +78,27 @@ const registerJob = async (req, res) => {
   });
 };
 
-// Login User
-const login = async (req, res) => {
+const loginMode = async (req, res) => {
   const { email, password } = req.body;
+  const { mode } = req.query;
+
   if (!email || !password) {
     throw new BadRequest(
       "Missing Details",
       "Please provide email and password"
     );
   }
-
-  const user = await User.findOne({ email });
-  if (!user) {
-    throw new Unauthenticated(
-      "Invalid Credentials",
-      `No user found with email: ${email}`
-    );
+  if (!mode) {
+    throw new BadRequest("Missing Mode", "Please provide login mode");
   }
 
-  const isPassword = await user.comparePassword(password);
-  if (!isPassword) {
-    throw new Unauthenticated("Invalid Credentials", "Incorrect password");
+  if (mode === "admin") {
+    login(res, Admin, password);
+  } else if (mode === "customer") {
+    login(res, Customer, password);
+  } else if (mode === "job") {
+    login(res, Job, password);
   }
-
-  if (!user.isVerified) {
-    throw new Unauthenticated("Not Verified", "Please verify your email");
-  }
-
-  res.status(StatusCodes.OK).json({ user: tokenUser });
 };
 
 // Logout User
@@ -118,6 +111,6 @@ module.exports = {
   registerAdmin,
   registerCustomer,
   registerJob,
-  login,
+  loginMode,
   logout,
 };

@@ -55,6 +55,10 @@ const JobSchema = mongoose.Schema(
       required: true,
       minlength: 6,
     },
+    role: {
+      type: String,
+      dafault: "job",
+    },
   },
   { timestamps: true }
 );

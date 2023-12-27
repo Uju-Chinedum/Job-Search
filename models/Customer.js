@@ -31,10 +31,12 @@ const CustomerSchema = mongoose.Schema(
     },
     confirmPassword: {
       type: String,
-      required: function () {
-        return !this.google.id && !this.google.token;
-      },
+      required: true,
       minlength: 6,
+    },
+    role: {
+      type: String,
+      default: "customer",
     },
   },
   { timestamps: true }
