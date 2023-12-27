@@ -24,6 +24,22 @@ const JobSchema = mongoose.Schema(
         message: "Please provide a valid email.",
       },
     },
+    phone: {
+      type: String,
+      required: true,
+      // validate: {
+      //   validator: validator.isEmail,
+      //   message: "Please provide a valid email.",
+      // },
+    },
+    whatsapp: {
+      type: String,
+      required: true,
+      // validate: {
+      //   validator: validator.isEmail,
+      //   message: "Please provide a valid email.",
+      // },
+    },
     occupation: {
       type: String,
       required: true,

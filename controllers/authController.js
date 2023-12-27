@@ -4,40 +4,77 @@ const Admin = require("../models/Admin");
 const Customer = require("../models/Customer");
 const Job = require("../models/Job");
 const { BadRequest, Unauthenticated } = require("../errors");
+const { passwordConfirm } = require("../utils");
 
 const registerAdmin = async (req, res) => {
-  if (req.body.password !== req.body.confirmPassword) {
-    throw new BadRequest("Incorrect Password", "Passwords do not match.");
+  const isSamePassword = passwordConfirm(
+    req.body.password,
+    req.body.confirmPassword
+  );
+  if (!isSamePassword) {
+    throw new BadRequest(
+      "Invalid Details",
+      "password does not match confirmPassword"
+    );
   }
 
-  const user = await User.create(req.body);
+  const admin = await Admin.create(req.body);
 
   res.status(StatusCodes.CREATED).json({
-    msg: "Please check your email and confirm it",
+    admin: {
+      firstName: admin.firstName,
+      lastName: admin.lastName,
+      email: admin.email,
+    },
   });
 };
 
-const registerCutomer = async (req, res) => {
-  if (req.body.password !== req.body.confirmPassword) {
-    throw new BadRequest("Incorrect Password", "Passwords do not match.");
+const registerCustomer = async (req, res) => {
+  const isSamePassword = passwordConfirm(
+    req.body.password,
+    req.body.confirmPassword
+  );
+  if (!isSamePassword) {
+    throw new BadRequest(
+      "Invalid Details",
+      "password does not match confirmPassword"
+    );
   }
 
-  const user = await User.create(req.body);
+  const customer = await Customer.create(req.body);
 
   res.status(StatusCodes.CREATED).json({
-    msg: "Please check your email and confirm it",
+    customer: {
+      firstName: customer.firstName,
+      lastName: customer.lastName,
+      email: customer.email,
+    },
   });
 };
 
 const registerJob = async (req, res) => {
-  if (req.body.password !== req.body.confirmPassword) {
-    throw new BadRequest("Incorrect Password", "Passwords do not match.");
+  const isSamePassword = passwordConfirm(
+    req.body.password,
+    req.body.confirmPassword
+  );
+  if (!isSamePassword) {
+    throw new BadRequest(
+      "Invalid Details",
+      "password does not match confirmPassword"
+    );
   }
 
-  const user = await User.create(req.body);
+  const job = await Job.create(req.body);
 
   res.status(StatusCodes.CREATED).json({
-    msg: "Please check your email and confirm it",
+    job: {
+      firstName: job.firstName,
+      lastName: job.lastName,
+      email: job.email,
+      occupation: job.occupation,
+      phone: job.phone,
+      whatsapp: job.whatsapp,
+    },
   });
 };
 
@@ -73,7 +110,6 @@ const login = async (req, res) => {
 
 // Logout User
 const logout = async (req, res) => {
-
   res.status(StatusCodes.OK).json({ msg: "Logged out successfully" });
 };
 
