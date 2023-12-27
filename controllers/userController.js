@@ -5,8 +5,7 @@ const Customer = require("../models/Customer");
 const Job = require("../models/Job");
 const { NotFound, BadRequest, Unauthenticated } = require("../errors");
 
-const selection =
-  "-password -confirmPassword -__v";
+const selection = "-password -confirmPassword -__v";
 
 const getAllCustomers = async (req, res) => {
   const { sort } = req.query;
@@ -82,9 +81,24 @@ const getSingleJob = async (req, res) => {
 };
 
 const showCurrentUser = async (req, res) => {
-  const me = await User.findOne({ _id: req.user.userId }).select(selection);
+  const { userId } = req.user;
 
-  res.status(StatusCodes.OK).json({ user: me });
+  const admin = await Admin.findOne({ _id: userId }).select(selection);
+  if (admin) {
+    return res.status(StatusCodes.OK).json({ admin });
+  }
+
+  const job = await Job.findOne({ _id: userId }).select(selection);
+  if (job) {
+    return res.status(StatusCodes.OK).json({ job });
+  }
+
+  const customer = await Customer.findOne({ _id: userId }).select(selection);
+  if (customer) {
+    return res.status(StatusCodes.OK).json({ customer });
+  }
+
+  throw new NotFound("User Not Found", `No user with id: ${userId}`);
 };
 
 const updateUser = async (req, res) => {
@@ -100,7 +114,6 @@ const updatePassword = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-
   res.status(StatusCodes.OK).json({ msg: "User account deleted successfully" });
 };
 
