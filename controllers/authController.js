@@ -3,7 +3,7 @@ const { StatusCodes } = require("http-status-codes");
 const Admin = require("../models/Admin");
 const Customer = require("../models/Customer");
 const Job = require("../models/Job");
-const { BadRequest, Unauthenticated } = require("../errors");
+const { BadRequest } = require("../errors");
 const { passwordConfirm, login } = require("../utils");
 
 const registerAdmin = async (req, res) => {
@@ -101,12 +101,11 @@ const loginMode = async (req, res) => {
   }
 };
 
-// Logout User
 const logout = async (req, res) => {
+  req.get("Authorization").replace("Bearer ", "");
   res.status(StatusCodes.OK).json({ msg: "Logged out successfully" });
 };
 
-// Export
 module.exports = {
   registerAdmin,
   registerCustomer,

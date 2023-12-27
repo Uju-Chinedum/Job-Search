@@ -4,7 +4,7 @@ const {
   registerAdmin,
   registerCustomer,
   registerJob,
-  login,
+  loginMode,
   logout,
 } = require("../controllers/authController");
 // const { validateUser } = require("../validation");
@@ -16,8 +16,7 @@ router.post("/register/admin", registerAdmin);
 router.post("/register/customer", registerCustomer);
 router.post("/register/job", registerJob);
 
-router.post("/login", login);
-router.post("/logout", authenticateUser, logout);
+router.post("/login", loginMode);
+router.get("/logout", authenticateUser, logout);
 
-// Export
 module.exports = router;
