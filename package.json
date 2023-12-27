@@ -1,0 +1,15 @@
+{
+  "name": "job-search",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon --ext js,json,env,html,yaml app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/Uju-Chinedum/Job-Search"
+  },
+  "author": "Uju Chinedum",
+  "license": "ISC"
+}
