@@ -1,19 +1,20 @@
 const express = require("express");
 
 const {
-  register,
+  registerAdmin,
+  registerCustomer,
+  registerJob,
   login,
   logout,
 } = require("../controllers/authController");
-const { validateUser } = require("../validation");
+// const { validateUser } = require("../validation");
 const { authenticateUser } = require("../middleware/authentication");
 
-// Variable Declaration
 const router = express.Router();
 
-router.post("/register/admin", register);
-router.post("/register/customer", register);
-router.post("/register/job", register);
+router.post("/register/admin", registerAdmin);
+router.post("/register/customer", registerCustomer);
+router.post("/register/job", registerJob);
 
 router.post("/login", login);
 router.post("/logout", authenticateUser, logout);

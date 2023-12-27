@@ -5,7 +5,31 @@ const Customer = require("../models/Customer");
 const Job = require("../models/Job");
 const { BadRequest, Unauthenticated } = require("../errors");
 
-const register = async (req, res) => {
+const registerAdmin = async (req, res) => {
+  if (req.body.password !== req.body.confirmPassword) {
+    throw new BadRequest("Incorrect Password", "Passwords do not match.");
+  }
+
+  const user = await User.create(req.body);
+
+  res.status(StatusCodes.CREATED).json({
+    msg: "Please check your email and confirm it",
+  });
+};
+
+const registerCutomer = async (req, res) => {
+  if (req.body.password !== req.body.confirmPassword) {
+    throw new BadRequest("Incorrect Password", "Passwords do not match.");
+  }
+
+  const user = await User.create(req.body);
+
+  res.status(StatusCodes.CREATED).json({
+    msg: "Please check your email and confirm it",
+  });
+};
+
+const registerJob = async (req, res) => {
   if (req.body.password !== req.body.confirmPassword) {
     throw new BadRequest("Incorrect Password", "Passwords do not match.");
   }
@@ -55,7 +79,9 @@ const logout = async (req, res) => {
 
 // Export
 module.exports = {
-  register,
+  registerAdmin,
+  registerCustomer,
+  registerJob,
   login,
   logout,
 };
