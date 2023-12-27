@@ -10,12 +10,24 @@ const authenticateUser = async (req, res, next) => {
   const token = authHeader.split(" ")[1];
 
   try {
-    const { userId, email } = verifyToken(token);
-    req.user = { userId, email };
-    next();
+    const { userId, email, role } = verifyToken(token);
+    req.user = { userId, email, role };
+    next();r
   } catch (error) {
     throw new Unauthenticated("Unauthorized", "Not authenticated");
   }
 };
 
-module.exports = authenticateUser;
+const authorizePermissions = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      throw new CustomError.UnauthorizedError(
+        "Unauthorized",
+        "Unauthorized to access this route"
+      );
+    }
+    next();
+  };
+};
+
+module.exports = {authenticateUser, authorizePermissions};
