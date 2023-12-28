@@ -25,7 +25,9 @@ router.route("/show-me").get(authenticateUser, showCurrentUser);
 router.route("/update-user").patch(authenticateUser, updateUser);
 router.route("/update-password").patch(authenticateUser, updatePassword);
 
-router.route("/delete-user").delete(authenticateUser, deleteUser);
+router
+  .route("/delete-user")
+  .delete(authenticateUser, authorizePermissions("admin"), deleteUser);
 
 router.route("/:id").get(authenticateUser, getSingleJob);
 

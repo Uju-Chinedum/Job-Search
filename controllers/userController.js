@@ -38,7 +38,7 @@ const getAllJobs = async (req, res) => {
   const queryObject = {};
 
   if (search) {
-    queryObject.position = { $regex: search, $options: "i" };
+    queryObject.occupation = { $regex: search, $options: "i" };
   }
 
   let result = Job.find(queryObject).select(selection);
@@ -203,7 +203,28 @@ const updatePassword = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  res.status(StatusCodes.OK).json({ msg: "User account deleted successfully" });
+  const { email } = req.body;
+  if (!email) {
+    throw new BadRequest("Missing Details", "Please input an email");
+  }
+
+  const customer = await Customer.findOne({ email });
+  if (customer) {
+    await customer.deleteOne();
+    return res
+      .status(StatusCodes.OK)
+      .json({ msg: "User account deleted successfully" });
+  }
+
+  const job = await Job.findOne({ email });
+  if (job) {
+    await job.deleteOne();
+    return res
+      .status(StatusCodes.OK)
+      .json({ msg: "User account deleted successfully" });
+  }
+
+  throw new NotFound("User Not Found", `No user with email: ${email}`);
 };
 
 module.exports = {
