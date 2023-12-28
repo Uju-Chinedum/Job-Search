@@ -3,7 +3,7 @@ const { StatusCodes } = require("http-status-codes");
 const Admin = require("../models/Admin");
 const Customer = require("../models/Customer");
 const Job = require("../models/Job");
-const { NotFound } = require("../errors");
+const { NotFound, BadRequest, Unauthenticated } = require("../errors");
 const { createJWT } = require("../utils");
 
 const selection = "-password -confirmPassword -__v";
@@ -152,8 +152,54 @@ const updateUser = async (req, res) => {
 
 const updatePassword = async (req, res) => {
   const { oldPassword, newPassword } = req.body;
+  if (!oldPassword || !newPassword) {
+    throw new BadRequest("Missing Details", "Please fill all fields");
+  }
 
-  res.status(StatusCodes.OK).json({ msg: "Password updated successfully" });
+  const admin = await Admin.findOne({ _id: req.user.userId });
+  if (admin) {
+    const isPassword = await admin.comparePassword(oldPassword);
+    if (!isPassword) {
+      throw new Unauthenticated("Invalid Credentials", "Incorrect password");
+    }
+
+    admin.password = newPassword;
+    await admin.save();
+
+    return res
+      .status(StatusCodes.OK)
+      .json({ msg: "Password updated successfully" });
+  }
+
+  const customer = await Customer.findOne({ _id: req.user.userId });
+  if (customer) {
+    const isPassword = await customer.comparePassword(oldPassword);
+    if (!isPassword) {
+      throw new Unauthenticated("Invalid Credentials", "Incorrect password");
+    }
+
+    customer.password = newPassword;
+    await customer.save();
+
+    return res
+      .status(StatusCodes.OK)
+      .json({ msg: "Password updated successfully" });
+  }
+
+  const job = await Job.findOne({ _id: req.user.userId });
+  if (job) {
+    const isPassword = await job.comparePassword(oldPassword);
+    if (!isPassword) {
+      throw new Unauthenticated("Invalid Credentials", "Incorrect password");
+    }
+
+    job.password = newPassword;
+    await job.save();
+
+    return res
+      .status(StatusCodes.OK)
+      .json({ msg: "Password updated successfully" });
+  }
 };
 
 const deleteUser = async (req, res) => {
