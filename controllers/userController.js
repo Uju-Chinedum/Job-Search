@@ -3,7 +3,8 @@ const { StatusCodes } = require("http-status-codes");
 const Admin = require("../models/Admin");
 const Customer = require("../models/Customer");
 const Job = require("../models/Job");
-const { NotFound, BadRequest, Unauthenticated } = require("../errors");
+const { NotFound } = require("../errors");
+const { createJWT } = require("../utils");
 
 const selection = "-password -confirmPassword -__v";
 
@@ -102,9 +103,51 @@ const showCurrentUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const { firstName, lastName, email, school, matNo } = req.body;
+  const { userId } = req.user;
 
-  res.status(StatusCodes.OK).json({ user: tokenUser });
+  const admin = await Admin.findOneAndUpdate({ _id: userId }, req.body, {
+    new: true,
+    runValidators: true,
+  }).select(selection);
+  if (admin) {
+    const payload = {
+      userId: admin._id,
+      email: admin.email,
+      role: admin.role,
+    };
+    const token = createJWT({ payload });
+    return res.status(StatusCodes.OK).json({ payload, token });
+  }
+
+  const customer = await Customer.findOneAndUpdate({ _id: userId }, req.body, {
+    new: true,
+    runValidators: true,
+  }).select(selection);
+  if (customer) {
+    const payload = {
+      userId: customer._id,
+      email: customer.email,
+      role: customer.role,
+    };
+    const token = createJWT({ payload });
+    return res.status(StatusCodes.OK).json({ payload, token });
+  }
+
+  const job = await Job.findOneAndUpdate({ _id: userId }, req.body, {
+    new: true,
+    runValidators: true,
+  }).select(selection);
+  if (job) {
+    const payload = {
+      userId: job._id,
+      email: job.email,
+      role: job.role,
+    };
+    const token = createJWT({ payload });
+    return res.status(StatusCodes.OK).json({ payload, token });
+  }
+
+  throw new NotFound("User Not Found", `No user with id: ${userId}`);
 };
 
 const updatePassword = async (req, res) => {
