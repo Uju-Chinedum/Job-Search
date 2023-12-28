@@ -12,7 +12,7 @@ const login = async (res, model, email, password) => {
     );
   }
 
-  const isPassword = await model.comparePassword(password);
+  const isPassword = await document.comparePassword(password);
   if (!isPassword) {
     throw new Unauthenticated("Invalid Credentials", "Incorrect password");
   }
