@@ -1,7 +1,7 @@
 const { Unauthenticated } = require("../errors");
 const { StatusCodes } = require("http-status-codes");
 
-const login = async (res, model, password) => {
+const login = async (res, model, email, password) => {
   const document = await model
     .findOne({ email })
     .select("-password -confirmPassword");

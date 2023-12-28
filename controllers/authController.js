@@ -93,11 +93,11 @@ const loginMode = async (req, res) => {
   }
 
   if (mode === "admin") {
-    login(res, Admin, password);
+    login(res, Admin, email, password);
   } else if (mode === "customer") {
-    login(res, Customer, password);
+    login(res, Customer, email, password);
   } else if (mode === "job") {
-    login(res, Job, password);
+    login(res, Job, email, password);
   }
 };
 
