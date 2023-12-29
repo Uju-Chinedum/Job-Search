@@ -12,7 +12,7 @@ const authenticateUser = async (req, res, next) => {
   try {
     const { userId, email, role } = verifyToken(token);
     req.user = { userId, email, role };
-    next();r
+    next();
   } catch (error) {
     throw new Unauthenticated("Unauthorized", "Not authenticated");
   }
