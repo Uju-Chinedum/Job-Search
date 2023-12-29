@@ -116,7 +116,7 @@ const updateUser = async (req, res) => {
       role: admin.role,
     };
     const token = createJWT({ payload });
-    return res.status(StatusCodes.OK).json({ payload, token });
+    return res.status(StatusCodes.OK).json({ admin, token });
   }
 
   const customer = await Customer.findOneAndUpdate({ _id: userId }, req.body, {
@@ -130,7 +130,7 @@ const updateUser = async (req, res) => {
       role: customer.role,
     };
     const token = createJWT({ payload });
-    return res.status(StatusCodes.OK).json({ payload, token });
+    return res.status(StatusCodes.OK).json({ customer, token });
   }
 
   const job = await Job.findOneAndUpdate({ _id: userId }, req.body, {
@@ -144,7 +144,7 @@ const updateUser = async (req, res) => {
       role: job.role,
     };
     const token = createJWT({ payload });
-    return res.status(StatusCodes.OK).json({ payload, token });
+    return res.status(StatusCodes.OK).json({ job, token });
   }
 
   throw new NotFound("User Not Found", `No user with id: ${userId}`);
