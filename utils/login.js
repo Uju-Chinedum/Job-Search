@@ -1,5 +1,6 @@
-const { Unauthenticated } = require("../errors");
 const { StatusCodes } = require("http-status-codes");
+const { Unauthenticated } = require("../errors");
+const { createJWT } = require("./jwt")
 
 const login = async (res, model, email, password) => {
   const document = await model
