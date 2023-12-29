@@ -8,7 +8,7 @@ const login = async (res, model, email, password) => {
   if (!document) {
     throw new Unauthenticated(
       "Invalid Credentials",
-      `No ${model.toLowerCase()} found with email: ${email}`
+      `No ${model.modelName.toLowerCase()} found with email: ${email}`
     );
   }
 
