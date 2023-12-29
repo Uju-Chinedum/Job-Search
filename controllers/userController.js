@@ -6,7 +6,7 @@ const Job = require("../models/Job");
 const { NotFound, BadRequest, Unauthenticated } = require("../errors");
 const { createJWT } = require("../utils");
 
-const selection = "-password -confirmPassword -__v";
+const selection = "-password -confirmPassword -role -createdAt -__v";
 
 const getAllCustomers = async (req, res) => {
   const { sort } = req.query;
