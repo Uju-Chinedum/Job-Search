@@ -3,8 +3,7 @@ const { StatusCodes } = require("http-status-codes");
 
 const login = async (res, model, email, password) => {
   const document = await model
-    .findOne({ email })
-    .select("-password -confirmPassword");
+    .findOne({ email });
   if (!document) {
     throw new Unauthenticated(
       "Invalid Credentials",

@@ -72,7 +72,6 @@ JobSchema.pre("save", async function () {
 });
 
 JobSchema.methods.comparePassword = async function (candidate) {
-  console.log('Comparing passwords:', candidate, this.password);
   const isMatch = await bcrypt.compare(candidate, this.password);
   return isMatch;
 };
