@@ -1,5 +1,5 @@
 const { verifyToken } = require("../utils");
-const { Unauthenticated } = require("../errors");
+const { Unauthenticated, Unauthorized } = require("../errors");
 
 const authenticateUser = async (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -21,7 +21,7 @@ const authenticateUser = async (req, res, next) => {
 const authorizePermissions = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      throw new CustomError.UnauthorizedError(
+      throw new Unauthorized(
         "Unauthorized",
         "Unauthorized to access this route"
       );
