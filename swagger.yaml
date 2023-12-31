@@ -189,7 +189,7 @@ paths:
               example:
                 admin: { user details } # Example response for an admin
 
-  /user/{userId}:
+  /user/get-single-job/{userId}:
     parameters:
       - name: userId
         in: path
