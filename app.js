@@ -5,6 +5,8 @@ const helmet = require("helmet");
 const xss = require("xss-clean");
 const cors = require("cors");
 const mongoSanitize = require("express-mongo-sanitize");
+const swagger = require("swagger-ui-express");
+const yaml = require("yamljs");
 
 const connectDB = require("./db/connect");
 const notFound = require("./middleware/notFound");
@@ -14,6 +16,7 @@ const userRouter = require("./routes/userRoute");
 
 const app = express();
 const port = process.env.PORT || 5000;
+const swaggerDocs = yaml.load("./swagger.yaml");
 
 app.use(helmet());
 app.use(xss());
@@ -25,6 +28,7 @@ app.use(express.static("./public"));
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", userRouter);
+app.use("/api-docs", swagger.serve, swagger.setup(swaggerDocs));
 
 app.use(notFound);
 app.use(errorHandler);

@@ -1,0 +1,196 @@
+openapi: 3.0.0
+info:
+  title: Job-Search
+  version: 1.0.0
+servers:
+  - url: https://job-search-iogy.onrender.com/api/v1
+    description: Production server
+
+tags:
+  - name: Auth
+    description: Operations related to authentication
+  - name: User
+    description: Operations related to user management
+
+paths:
+  /auth/register/admin:
+    post:
+      summary: Register Admin
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              firstName: Annadiane
+              lastName: Quilleash
+              email: aquilleash1@apache.org
+              password: secret
+              confirmPassword: secret
+      responses:
+        '200':
+          description: Successfully registered admin
+
+  /auth/register/customer:
+    post:
+      summary: Register Customer
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              firstName: Agace
+              lastName: Dignon
+              email: adignon1@marketwatch.com
+              password: secret
+              confirmPassword: secret
+      responses:
+        '200':
+          description: Successfully registered customer
+
+  /auth/register/job:
+    post:
+      summary: Register Job
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              firstName: Manda
+              lastName: Killiam
+              email: mkilliam1@google.ru
+              phone: +46 621 762 0005
+              whatsapp: +257 530 476 9762
+              occupation: Structural Analysis Engineer
+              password: secret
+              confirmPassword: secret
+      responses:
+        '200':
+          description: Successfully registered job
+
+  /auth/login:
+    post:
+      summary: Login
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              email: aquilleash1@apache.org
+              password: secret
+      responses:
+        '200':
+          description: Successfully logged in
+
+  /auth/logout:
+    get:
+      summary: Logout
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successfully logged out
+
+  /user/customer:
+    get:
+      summary: Get All Customers
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: sort
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved customers
+
+  /user/job:
+    get:
+      summary: Get All Jobs
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved jobs
+
+  /user/show-me:
+    get:
+      summary: Show Current User
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successfully retrieved current user
+
+  /user/{userId}:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Get Single Job
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successfully retrieved job
+
+    patch:
+      summary: Update User
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              lastName: Quilleash
+      responses:
+        '200':
+          description: Successfully updated user
+
+    delete:
+      summary: Delete User
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successfully deleted user
+
+security:
+  - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
