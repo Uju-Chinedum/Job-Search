@@ -2,7 +2,7 @@
 
 This is a student-oriented blog CMS (Content Management System). Users may register, validate their email address, log in, create blogs, make comments, like blogs, and execute other user-related operations. Node.js, Express, and MongoDB are used to build the CMS.
 
-You can view the project at <https://blog-cms-2f0u.onrender.com>
+You can view the project at <https://job-search-iogy.onrender.com>
 
 ## Prerequisites
 
