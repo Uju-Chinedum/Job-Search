@@ -77,7 +77,7 @@ const loginAdmin = async (req, res) => {
     );
   }
 
-  const isPassword = await Admin.comparePassword(password);
+  const isPassword = await admin.comparePassword(password);
   if (!isPassword) {
     throw new Unauthenticated("Invalid Credentials", "Incorrect password");
   }
@@ -114,7 +114,7 @@ const loginCustomer = async (req, res) => {
     );
   }
 
-  const isPassword = await Customer.comparePassword(password);
+  const isPassword = await customer.comparePassword(password);
   if (!isPassword) {
     throw new Unauthenticated("Invalid Credentials", "Incorrect password");
   }
@@ -151,7 +151,7 @@ const loginJob = async (req, res) => {
     );
   }
 
-  const isPassword = await Job.comparePassword(password);
+  const isPassword = await job.comparePassword(password);
   if (!isPassword) {
     throw new Unauthenticated("Invalid Credentials", "Incorrect password");
   }
