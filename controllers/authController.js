@@ -30,17 +30,6 @@ const registerAdmin = async (req, res) => {
 };
 
 const registerCustomer = async (req, res) => {
-  const isSamePassword = passwordConfirm(
-    req.body.password,
-    req.body.confirmPassword
-  );
-  if (!isSamePassword) {
-    throw new BadRequest(
-      "Invalid Details",
-      "password does not match confirmPassword"
-    );
-  }
-
   const customer = await Customer.create(req.body);
 
   res.status(StatusCodes.CREATED).json({
