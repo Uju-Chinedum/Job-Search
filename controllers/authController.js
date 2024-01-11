@@ -30,17 +30,6 @@ const registerAdmin = async (req, res) => {
 };
 
 const registerCustomer = async (req, res) => {
-  const customer = await Customer.create(req.body);
-
-  res.status(StatusCodes.CREATED).json({
-    customer: {
-      username: customer.username,
-      email: customer.email,
-    },
-  });
-};
-
-const registerJob = async (req, res) => {
   const isSamePassword = passwordConfirm(
     req.body.password,
     req.body.confirmPassword
@@ -52,16 +41,25 @@ const registerJob = async (req, res) => {
     );
   }
 
+  const customer = await Customer.create(req.body);
+
+  res.status(StatusCodes.CREATED).json({
+    customer: {
+      username: customer.username,
+      email: customer.email,
+    },
+  });
+};
+
+const registerJob = async (req, res) => {
   const job = await Job.create(req.body);
 
   res.status(StatusCodes.CREATED).json({
     job: {
-      firstName: job.firstName,
-      lastName: job.lastName,
+      fullName: job.fullName,
       email: job.email,
       occupation: job.occupation,
       phone: job.phone,
-      whatsapp: job.whatsapp,
     },
   });
 };
