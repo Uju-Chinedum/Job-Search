@@ -32,6 +32,10 @@ const JobSchema = mongoose.Schema(
       required: true,
       index: true,
     },
+    bio: {
+      type: String,
+      required: true,
+    },
     password: {
       type: String,
       required: true,
