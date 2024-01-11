@@ -4,7 +4,7 @@ const Admin = require("../models/Admin");
 const Customer = require("../models/Customer");
 const Job = require("../models/Job");
 const { BadRequest, Unauthenticated } = require("../errors");
-const { passwordConfirm } = require("../utils");
+const { passwordConfirm, createJWT } = require("../utils");
 
 const registerAdmin = async (req, res) => {
   const isSamePassword = passwordConfirm(
