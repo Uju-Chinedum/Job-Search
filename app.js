@@ -25,6 +25,7 @@ app.use(mongoSanitize());
 
 app.use(express.json());
 app.use(express.static("./public"));
+app.options("*", cors());
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", userRouter);
