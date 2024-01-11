@@ -30,8 +30,8 @@ const CustomerSchema = mongoose.Schema(
       minlength: 6,
     },
     phone: {
-      type: Strimg,
-      required: true.
+      type: String,
+      required: true,
     },
     role: {
       type: String,
