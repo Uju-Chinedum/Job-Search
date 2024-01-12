@@ -4,30 +4,15 @@ const bcrypt = require("bcryptjs");
 
 const AdminSchema = mongoose.Schema(
   {
-    fullName: {
+    username: {
       type: String,
       required: true,
       trim: true,
-    },
-    email: {
-      type: String,
-      required: true,
       unique: true,
-      index: true,
-      validate: {
-        validator: validator.isEmail,
-        message: "Please provide a valid email.",
-      },
     },
     password: {
       type: String,
       required: true,
-      minlength: 6,
-    },
-    confirmPassword: {
-      type: String,
-      required: true,
-      minlength: 6,
     },
     role: {
       type: String,
@@ -42,7 +27,6 @@ AdminSchema.pre("save", async function () {
 
   const salt = await bcrypt.genSalt(8);
   this.password = await bcrypt.hash(this.password, salt);
-  this.confirmPassword = this.password;
 });
 
 AdminSchema.methods.comparePassword = async function (candidate) {

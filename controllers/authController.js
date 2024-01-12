@@ -7,23 +7,11 @@ const { BadRequest, Unauthenticated } = require("../errors");
 const { passwordConfirm, createJWT } = require("../utils");
 
 const registerAdmin = async (req, res) => {
-  const isSamePassword = passwordConfirm(
-    req.body.password,
-    req.body.confirmPassword
-  );
-  if (!isSamePassword) {
-    throw new BadRequest(
-      "Invalid Details",
-      "password does not match confirmPassword"
-    );
-  }
-
   const admin = await Admin.create(req.body);
 
   res.status(StatusCodes.CREATED).json({
     admin: {
-      fullName: admin.fullName,
-      email: admin.email,
+      username: admin.username,
     },
   });
 };
@@ -64,16 +52,16 @@ const registerJob = async (req, res) => {
 };
 
 const loginAdmin = async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
+  const { username, password } = req.body;
+  if (!username || !password) {
     throw new BadRequest("Missing Details", "Please fill all fields");
   }
 
-  const admin = await Admin.findOne({ email });
+  const admin = await Admin.findOne({ username });
   if (!admin) {
     throw new Unauthenticated(
       "Invalid Credentials",
-      `No admin found with email: ${email}`
+      `No admin found with username: ${username}`
     );
   }
 
@@ -84,7 +72,7 @@ const loginAdmin = async (req, res) => {
 
   const payload = {
     userId: admin._id,
-    email: admin.email,
+    username: admin.username,
     role: admin.role,
   };
   const token = createJWT({ payload });
@@ -93,8 +81,7 @@ const loginAdmin = async (req, res) => {
     message: "Admin logged in successfully",
     user: {
       id: admin._id,
-      fullName: admin.fullName,
-      email: admin.email,
+      username: admin.username,
     },
     token,
   });
