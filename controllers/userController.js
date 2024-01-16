@@ -227,6 +227,18 @@ const deleteUser = async (req, res) => {
   throw new NotFound("User Not Found", `No user with email: ${email}`);
 };
 
+const stats = async (req, res) => {
+  const jobs = await Job.find({}).select(selection);
+  const customers = await Customer.find({}).select(selection);
+
+  const jobLength = jobs.length;
+  const customerLength = customers.length;
+
+  const stats = { jobs: jobLength, customer: customerLength };
+
+  res.status(StatusCodes.OK).json({ stats });
+};
+
 module.exports = {
   getAllCustomers,
   getAllJobs,
@@ -235,4 +247,5 @@ module.exports = {
   updateUser,
   updatePassword,
   deleteUser,
+  stats,
 };

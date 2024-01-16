@@ -8,6 +8,7 @@ const {
   updateUser,
   updatePassword,
   deleteUser,
+  stats,
 } = require("../controllers/userController");
 const {
   authenticateUser,
@@ -28,6 +29,10 @@ router.route("/update-password").patch(authenticateUser, updatePassword);
 router
   .route("/delete-user")
   .delete(authenticateUser, authorizePermissions("admin"), deleteUser);
+
+router
+  .route("/stats")
+  .get(authenticateUser, authorizePermissions("admin"), stats);
 
 router.route("/:id").get(authenticateUser, getSingleJob);
 
