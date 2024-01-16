@@ -19,9 +19,12 @@ const JobSchema = mongoose.Schema(
         message: "Please provide a valid email.",
       },
     },
-    phone: {
+    whatsapp: {
       type: String,
       required: true,
+    },
+    phone: {
+      type: String,
     },
     location: {
       type: String,
