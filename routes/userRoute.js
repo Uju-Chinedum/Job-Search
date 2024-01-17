@@ -27,7 +27,7 @@ router.route("/update-user").patch(authenticateUser, updateUser);
 router.route("/update-password").patch(authenticateUser, updatePassword);
 
 router
-  .route("/delete-user")
+  .route("/delete-user/:id")
   .delete(authenticateUser, authorizePermissions("admin"), deleteUser);
 
 router
