@@ -203,12 +203,12 @@ const updatePassword = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  const { email } = req.body;
-  if (!email) {
-    throw new BadRequest("Missing Details", "Please input an email");
+  const { id } = req.params;
+  if (!id) {
+    throw new BadRequest("Missing Details", "Please enter valid user id");
   }
 
-  const customer = await Customer.findOne({ email });
+  const customer = await Customer.findOne({ _id: id });
   if (customer) {
     await customer.deleteOne();
     return res
@@ -216,7 +216,7 @@ const deleteUser = async (req, res) => {
       .json({ msg: "User account deleted successfully" });
   }
 
-  const job = await Job.findOne({ email });
+  const job = await Job.findOne({ _id: id });
   if (job) {
     await job.deleteOne();
     return res
@@ -224,7 +224,7 @@ const deleteUser = async (req, res) => {
       .json({ msg: "User account deleted successfully" });
   }
 
-  throw new NotFound("User Not Found", `No user with email: ${email}`);
+  throw new NotFound("User Not Found", `No user with id: ${id}`);
 };
 
 const stats = async (req, res) => {
